@@ -1,0 +1,58 @@
+Uma hash table guarda os pares chave-valor atribundo chaves a diferentes computadores, conhecidos como nodes.
+Um node vai guardar os valores de todas as chaves que é responsavel.
+Chord diz como as chaves são atribuidas aos nodes e como um node pode descobrir o valor dado por uma chave.
+
+-> Cada nó tem ligação para o anterior e para o próximo;
+-> Temos 2 tipos de Hash 
+	-> Sobre o endereço -> Cada nó vai estar dentro do circulo -> hash(node_addr)
+	-> Sobre a key      -> Cada nó guarda informação -> hash(key)
+
+->O nó que armazena o valor é o sucessor da chave, que é, o menor nó hash(node_addr) >= hash(key)
+->JOIN_REQ -> vê o hash de um novo nó;
+-> No circulo vamor ter todos os valores de hash entre 0<valores<1023
+->Inicialmente (node inicial), o predecessor não é conhecido;
+
+-> Para A saber o seu sucessor, pergunta ao C se B é o seu predecessor. Se sim, top, se não, pergunta ao B o seu predessessor e assim sucessivamente até encontrar o seu successor. O valor de hash deve estar entre ambos (o que pergunta e o que é questionado).
+
+-> NOTA: se A pergunta ao B (já feita uma volta ao circulo), se C é o predecessor de B, neste caso:
+id_A > id_B  && (id_C > id_A || id_C < id_B) 
+
+
+-> Se A <-> B <-> C
+idA < idB && idC < idB && idC > idA, A passa para o meio de B e C;
+
+
+
+
+
+
+PARA OS PREDECESSORS
+
+A.send(B, predecessor)
+B.send(A, STABILIZE(None)) 
+
+stabilize(from_id)                                  #id_successor 
+	if from_id pertence ]self_id, successor_id] #(há um nó no meio de ambos)
+		successor_id = from_id
+	send(successor_addr, NOTIFY)                #o notify atualiza o predeccessor
+		
+
+ ---------------
+| keyA | valueA |
+ ---------------
+hash(keyA) 
+PUT -> inserir um novo par key/value na hash_table
+#não tem o endereço :|
+
+
+pickel -> descodificar -> loadS
+       -> codificar    -> dumpS
+
+#socket tcp -> orientadas ao canal -> just send -> "mesmo endereço"
+#socket udp -> criada a socket, cada vez que fazemos um send, podemos ter um endereço diferente, utilizamos estas no chord :D
+ -> Problema:  valor addr do "B" é o "A". O que fazer? O: 
+	       -> o "A" envia logo o client_addr, assim não é feito o caminho inverso, percorrendo todos os nós
+
+|addr| -> se addr -> do vem do client
+	-> se output['args']['client_addr'] circula dentro da rede 
+
